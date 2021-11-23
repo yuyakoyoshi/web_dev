@@ -5,28 +5,23 @@
 # This workflow will download a prebuilt Ruby version, install dependencies, and  run linters
 name: Rails - Install dependencies and run linters
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: push
 jobs:
-  run-lint:
+  run_spec:
+    name: Run spec
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup Ruby and install gems
-        uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+        uses: actions/checkout@v2
         with:
+          ruby-version: 2.6.x
           bundler-cache: true
-      # Add or Replace any other security checks here
-      - name: Run security checks
+      - name: Run rspec
         run: |
-          bin/bundler-audit --update
-          bin/brakeman -q -w2
-      # Add or Replace any other Linters here
-      - name: Run linters
-        run: |
-          bin/rubocop --parallel
+          gem install bundler
+          bundle install --path vendor/bundle --quiet --jobs 4 --retry 3
+          bundle exec rspec
+
