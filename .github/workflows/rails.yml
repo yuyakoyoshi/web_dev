@@ -26,10 +26,6 @@ jobs:
         with:
           ruby-version: 2.6
 
-      - name: Ruby Bundler
-        uses: actions/cache@v2
-        with:
-
       - name: Run rspec
         run: |
           gem install bunler
